@@ -1,86 +1,79 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import { NavLink, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import routes from '../routes';
 import Cast from '../Component/Cast';
-import Reviews from '../Component/Reviews'
+import Reviews from '../Component/Reviews';
+import MovieCard from '../Component/MovieCard';
+import MovieNavigation from '../Component/MovieNavigation';
 
 class MovieDetailsPage extends Component {
-    state = {
-        // movie:null,
-        poster_path: null,
-        title: null,
-        popularity:null,
-        overview:null,
-        genres:[],
-    };
+  state = {
+    // movie:null,
+    poster_path: null,
+    title: null,
+    popularity: null,
+    overview: null,
+    genres: [],
+  };
 
-        
-    async componentDidMount() {
-        const { movieId } = this.props.match.params;
+  async componentDidMount() {
+    const { movieId } = this.props.match.params;
 
-    const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=b0771150ba8a2e624afdbb8a92bbf802`);
+    const response = await Axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=b0771150ba8a2e624afdbb8a92bbf802`,
+    );
     // console.log(response.data);
-        this.setState({...response.data });
-    }
-    
+    this.setState({ ...response.data });
+  }
+  handleGoBack = () => {
+    const { location, history } = this.props;
+    // if (location.state && location.state.from) {
+    //   return history.push(location.state.from);
+    // } history.push(routes.home);
+    //то же самое, но новое применение оператора "?."
+    history.push(location?.state?.from || routes.home);
+  };
 
   render() {
-        
-        const { poster_path, title, popularity, overview, genres } = this.state;
-        // const urlPoster = `https://image.tmdb.org/t/p/w500/${poster_path}`
+    const { poster_path, title, vote_average, overview, genres } = this.state;
+
+    const { movieId } = this.props.match.params;
     return (
-            <>
-<div className="MovieDetailsPage">
-          {/* <h1>страница одной книги id: {this.props.match.params.movieId}</h1> */}
-     <img src={ `https://image.tmdb.org/t/p/w500/${poster_path}`} alt=""
-     className="Movie--img" />
-     <div className="MoviesInformation">
-     <h1>{title}</h1>
-     <p>User Score:{popularity}%</p>
-     <h2>Overview</h2>
-     <p>{overview}</p>
-     <h3>Genres</h3>
-     <ul>
-         {genres.map(genre => <li key={genre.id}>{genre.name}</li>)}
-     </ul>
-         
-     </div>
-               
-</div>
-               
- <div className="MovieAdditionalInfo">
-    <h4 className="title">Additional information</h4>
-    <ul>
-      <li>
-        <NavLink
-          exact
-          to={`/movies/${this.props.match.params.movieId}/cast`}
-          className="NavLinkMovies"
+      <>
+        <button
+          type="button"
+          onClick={this.handleGoBack}
+          className="back-button"
         >
-          Cast</NavLink>
-      </li>
-      <li>
-        <NavLink
-          to={`/movies/${this.props.match.params.movieId}/reviews`}
-          className="NavLinkMovies"
-        >
-          Reviews</NavLink>
-      </li>
-    </ul>
-  </div>       
-        <Route path="/movies/:movieId/cast" render={props =>
-            < Cast movieId={props.match.params.movieId} />}/>
-                    
+          Go back
+        </button>
+        <MovieCard
+          poster_path={poster_path}
+          title={title}
+          vote_average={vote_average}
+          overview={overview}
+          genres={genres}
+        />
+        <h4 className="title">Additional information</h4>
+
+        <MovieNavigation id={movieId} />
+
         <Route
-            path="/movies/:movieId/reviews"
-            render={props => {
-            console.log(props.match.params.movieId);
-            return < Reviews movieId={props.match.params.movieId} />
-            }}
-        />          
+          path={`${routes.cast}`}
+          render={props => <Cast movieId={props.match.params.movieId} />}
+        />
+
+        <Route
+          path={`${routes.reviews}`}
+          render={props => {
+            // console.log(props.match.params.movieId);
+            return <Reviews movieId={props.match.params.movieId} />;
+          }}
+        />
       </>
-      )    
-    }
+    );
+  }
 }
- 
+
 export default MovieDetailsPage;
