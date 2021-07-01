@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import './styles.css';
 import routes from './routes';
+import Container from './Component/Container';
 import AppBar from './Component/AppNavBar';
 import Spinner from './Component/Loader';
 const HomePage = lazy(() =>
@@ -17,7 +18,7 @@ const MovieDetailsPage = lazy(() =>
 );
 
 const App = () => (
-  <>
+  <Container>
     <AppBar />
 
     <Suspense fallback={<Spinner />}>
@@ -29,7 +30,7 @@ const App = () => (
         <Route component={HomePage} />
       </Switch>
     </Suspense>
-  </>
+  </Container>
 );
 
 export default App;

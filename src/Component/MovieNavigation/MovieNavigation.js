@@ -11,7 +11,7 @@ const MovieNavigation = ({ id, location }) => {
             exact
             to={{
               pathname: `${routes.movies}/${id}/cast`,
-              state: { from: location },
+              // state: { from: location },
             }}
             className="NavLinkMovies"
           >

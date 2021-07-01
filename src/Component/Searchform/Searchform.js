@@ -28,7 +28,7 @@ class SearchForm extends Component {
             type="text"
             autoComplete="off"
             autoFocus
-            placeholder="Search movie"
+            // placeholder="Search movie"
             onChange={this.handleChange}
             value={query}
           />

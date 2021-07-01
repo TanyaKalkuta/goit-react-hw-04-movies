@@ -2,6 +2,7 @@ import React from 'react';
 
 const MovieCard = ({ poster_path, title, vote_average, overview, genres }) => {
   const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+
   return (
     <div className="MovieDetailsPage">
       {/* <h1>страница одной книги id: {this.props.match.params.movieId}</h1> */}
