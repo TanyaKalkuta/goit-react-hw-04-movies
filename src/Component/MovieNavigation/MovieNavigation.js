@@ -11,7 +11,7 @@ const MovieNavigation = ({ id, location }) => {
             exact
             to={{
               pathname: `${routes.movies}/${id}/cast`,
-              // state: { from: location },
+              state: { from: location.state.from },
             }}
             className="NavLinkMovies"
           >
@@ -22,6 +22,7 @@ const MovieNavigation = ({ id, location }) => {
           <NavLink
             to={{
               pathname: `${routes.movies}/${id}/reviews`,
+              state: { ...location.state },
             }}
             className="NavLinkMovies"
           >

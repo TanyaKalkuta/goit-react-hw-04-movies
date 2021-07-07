@@ -8,21 +8,12 @@ class MoviesPage extends Component {
     movies: [],
   };
 
-  //   async componentDidMount() {
-  //     const response = await Axios.get(
-  //       `https://api.themoviedb.org/3/search/movie?api_key=b0771150ba8a2e624afdbb8a92bbf802&language=en-US&page=1&include_adult=false`,
-  //     );
-  //     console.log(response.data.results);
-  //     // this.setState({ movies: response.data.results });
-  //   }
-
-  // async componentDidMount() {
-  //   const response = await Axios.get(
-  //     `https://api.themoviedb.org/3/trending/movie/day?api_key=b0771150ba8a2e624afdbb8a92bbf802`,
-  //   );
-  //   console.log(response.data.results);
-  //   this.setState({ movies: response.data.results });
-  // }
+  componentDidMount() {
+    const movies = localStorage.getItem('movies');
+    const parsMovies = JSON.parse(movies);
+    console.log(parsMovies);
+    if (parsMovies) this.setState({ movies: parsMovies });
+  }
 
   onChangeQuery = query => {
     axios
@@ -33,6 +24,11 @@ class MoviesPage extends Component {
         this.setState({
           movies: response.data.results,
         });
+
+        localStorage.setItem('movies', JSON.stringify(this.state.movies));
+        if (this.state.movies.length === 0) {
+          alert('Sorry, movie not found');
+        }
       });
   };
 
