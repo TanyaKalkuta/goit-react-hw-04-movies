@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import MoviesList from '../Component/MoviesList';
 import SearchForm from '../Component/Searchform';
+import queryString from 'query-string';
 
 class MoviesPage extends Component {
   state = {
@@ -9,10 +10,21 @@ class MoviesPage extends Component {
   };
 
   componentDidMount() {
-    const movies = localStorage.getItem('movies');
-    const parsMovies = JSON.parse(movies);
-    console.log(parsMovies);
-    if (parsMovies) this.setState({ movies: parsMovies });
+    const getQueryFromProps = props =>
+      queryString.parse(props.location.search).query;
+    const query = getQueryFromProps(this.props);
+    console.log(query);
+    if (query) {
+      axios
+        .get(
+          `https://api.themoviedb.org/3/search/movie?api_key=b0771150ba8a2e624afdbb8a92bbf802&query=${query}`,
+        )
+        .then(response => {
+          this.setState({
+            movies: response.data.results,
+          });
+        });
+    }
   }
 
   onChangeQuery = query => {
@@ -25,11 +37,14 @@ class MoviesPage extends Component {
           movies: response.data.results,
         });
 
-        localStorage.setItem('movies', JSON.stringify(this.state.movies));
         if (this.state.movies.length === 0) {
           alert('Sorry, movie not found');
         }
       });
+    this.props.history.push({
+      pathname: this.props.location.pathname,
+      search: `query=${query}`,
+    });
   };
 
   render() {
