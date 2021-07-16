@@ -10,9 +10,10 @@ class MoviesPage extends Component {
   };
 
   componentDidMount() {
-    const getQueryFromProps = props =>
-      queryString.parse(props.location.search).query;
-    const query = getQueryFromProps(this.props);
+    // const getQueryFromProps = props =>
+    // queryString.parse(props.location.search).query;
+    //  const query = getQueryFromProps(this.props);
+    const query = queryString.parse(this.props.location.search).query;
     console.log(query);
     if (query) {
       axios
